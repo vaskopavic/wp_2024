@@ -1,42 +1,39 @@
 package mk.ukim.finki.wp.lab.repository;
 
-import jakarta.annotation.PostConstruct;
+import mk.ukim.finki.wp.lab.model.exceptions.InvalidAlbumIdException;
 import org.springframework.stereotype.Repository;
 
+import mk.ukim.finki.wp.lab.bootstrap.DataHolder;
+import mk.ukim.finki.wp.lab.model.Album;
 import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.model.Song;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
 public class SongRepository {
-    private final List<Song> songs;
-
-    public SongRepository() {
-        this.songs = new ArrayList<>();
-    }
-
-    @PostConstruct
-    public void init(){
-        songs.add(new Song("1", "SICKO MODE", "Hip-Hop", 2018, new ArrayList<>()));
-        songs.add(new Song("2", "Stronger", "Hip-Hop", 2007, new ArrayList<>()));
-        songs.add(new Song("3", "Day 'n' Nite", "Hip-Hop", 2008, new ArrayList<>()));
-        songs.add(new Song("4", "HUMBLE.", "Hip-Hop", 2017, new ArrayList<>()));
-        songs.add(new Song("5", "God's Plan", "Hip-Hop", 2018, new ArrayList<>()));
-    }
-
     public List<Song> findAll(){
-        return songs;
+        return DataHolder.songs;
     }
-    public Optional<Song> findByTrackId(String trackId){
-        return songs.stream()
-                .filter(s->s.getTrackId().equals(trackId))
-                .findFirst();
+    public Optional<Song> findByTrackId(Long trackId){
+        return DataHolder.songs.stream().filter(a -> a.getTrackId().equals(trackId)).findFirst();
     }
-    public void addArtistToSong(Artist artist, Song song){
-        song.getPerformers().removeIf(a->a.getId().equals(artist.getId()));
-        song.getPerformers().add(artist);
+
+    public Artist addArtistToSong(Artist artist, Song song){
+        song.addArtist(artist);
+        return artist;
+    }
+
+    public Optional<Song> save(String title, String genre, Integer releaseYear, Album album){
+        Song song = new Song(title, genre, releaseYear, album);
+        DataHolder.songs.removeIf(s -> Objects.equals(s.getTitle(), title));
+        DataHolder.songs.add(song);
+        return Optional.of(song);
+    }
+
+    public void deleteById(Long id) {
+        DataHolder.songs.removeIf(s -> s.getTrackId().equals(id));
     }
 }

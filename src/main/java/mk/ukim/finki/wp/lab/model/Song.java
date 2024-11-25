@@ -1,17 +1,40 @@
 package mk.ukim.finki.wp.lab.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @Data
+@NoArgsConstructor
+@Entity
+@Getter
 public class Song {
-    private String trackId;
-    private String title;
-    private String genre;
-    private int releaseYear;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long trackId;
+    String title;
+    String genre;
+    Integer releaseYear;
+    @ManyToMany
     private List<Artist> performers;
+    @ManyToOne
+    private Album album;
 
+    public Song(String title, String genre, Integer releaseYear, Album album) {
+        this.trackId = (long) (Math.random() * 1000);
+        this.title = title;
+        this.genre = genre;
+        this.releaseYear = releaseYear;
+        performers = new ArrayList<>();
+        this.album = album;
+    }
+
+    public void addArtist(Artist performer){
+        performers.add(performer);
+    }
 }

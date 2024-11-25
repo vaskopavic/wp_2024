@@ -42,7 +42,7 @@ public class SongListServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String trackId = req.getParameter("trackId");
+        Long trackId = Long.parseLong(req.getParameter("trackId"));
         Long artistId = Long.parseLong(req.getParameter("artistId"));
         songService.assignArtistToSong(artistId, trackId);
         resp.sendRedirect("/songDetails?trackId=" + trackId);

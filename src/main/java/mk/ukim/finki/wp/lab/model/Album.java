@@ -6,11 +6,11 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class Artist {
+public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String bio;
+    private String name;
+    private String genre;
+    private String releaseYear;
 }

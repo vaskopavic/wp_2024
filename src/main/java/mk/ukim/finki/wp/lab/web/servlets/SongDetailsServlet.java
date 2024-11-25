@@ -34,7 +34,7 @@ public class SongDetailsServlet extends HttpServlet {
 
         WebContext context = new WebContext(webExchange);
 
-        String trackId= req.getParameter("trackId");
+        Long trackId = Long.valueOf(req.getParameter("trackId"));
         Song song = songService.findByTrackId(trackId).orElseThrow(RuntimeException::new);
 
         context.setVariable("song",song);

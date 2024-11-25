@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.lab.service.impl;
 
+import mk.ukim.finki.wp.lab.model.Album;
 import org.springframework.stereotype.Service;
 
 import mk.ukim.finki.wp.lab.model.Artist;
@@ -27,7 +28,7 @@ public class ISongService implements SongService {
     }
 
     @Override
-    public void assignArtistToSong(Long artistId, String trackId) {
+    public void assignArtistToSong(Long artistId, Long trackId) {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new RuntimeException("Artist not found with ID: " + artistId));
         Song song = songRepository.findByTrackId(trackId)
@@ -41,7 +42,17 @@ public class ISongService implements SongService {
     }
 
     @Override
-    public Optional<Song> findByTrackId(String trackId) {
+    public Song findByTrackId(Long trackId) {
         return songRepository.findByTrackId(trackId);
+    }
+
+    Override
+    public Optional<Song> save(String title, String genre, Integer releaseYear, Album album) {
+        return songRepository.save(title, genre, releaseYear, album);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        this.songRepository.deleteById(id);
     }
 }

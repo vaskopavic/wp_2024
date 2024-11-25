@@ -20,7 +20,7 @@ public class ArtistController {
     }
 
     @PostMapping
-    public String getArtistsForSong(@RequestParam String trackId, Model model) {
+    public String getArtistsForSong(@RequestParam Long trackId, Model model) {
         Song song = songService.findByTrackId(trackId).orElseThrow(() -> new IllegalArgumentException("Invalid track ID"));
         model.addAttribute("trackId", trackId);
         model.addAttribute("artists", artistService.listArtists());
@@ -28,7 +28,7 @@ public class ArtistController {
     }
 
     @PostMapping("/add")
-    public String addArtistToSong(@RequestParam Long artistId, @RequestParam String trackId) {
+    public String addArtistToSong(@RequestParam Long artistId, @RequestParam Long trackId) {
         songService.findByTrackId(trackId)
                 .ifPresent(song -> artistService.ArtistFindById(artistId)
                         .ifPresent(artist -> songService.assignArtistToSong(artist.getId(), song.getTrackId())));
